@@ -1,69 +1,46 @@
-library("dplyr")
+# Load necessary package
+library(dplyr)
 
 # Create a data frame to store student information
-student_data <- data.frame(
-  Name = character(0),
-  Math_Score = numeric(0),
-  Science_Score = numeric(0),
-  History_Score = numeric(0),
-  Attendance = numeric(0)
+students <- data.frame(
+  Name = c("Alice", "Bob", "Charlie", "David", "Eva"),
+  Math_Score = c(85, 75, 90, 65, 78),
+  Science_Score = c(88, 80, 85, 70, 90),
+  History_Score = c(92, 70, 78, 80, 85),
+  Attendance = c(95, 80, 75, 60, 85)
 )
-print(student_data)
 
-# Function to add student information
-add_student <- function(name, math_score, science_score, history_score,
-                        attendance) {
-  new_student <- data.frame(
-    Name = name,
-    Math_Score = math_score,
-    Science_Score = science_score,
-    History_Score = history_score,
-    Attendance = attendance )
-  student_data <<- bind_rows(student_data, new_student)
-  cat("Student information added.\n")}
-
-# Function to calculate average scores
-calculate_average_scores <- function() {
-  avg_scores <- student_data %>%
-    mutate(Average_Score = (Math_Score + Science_Score + History_Score) / 3) %>%
-    select(Name, Average_Score)
-  return(avg_scores)
+# Function to calculate the average scores for each student
+calculate_average_scores <- function(data) {
+  data$Average_Score <- rowMeans(data[, 2:4])
+  return(data)
 }
 
-# Function to identify students with low attendance
-identify_low_attendance <- function(threshold) {
-  low_attendance <- student_data %>%
-    filter(Attendance < threshold) %>%
-    select(Name, Attendance)
-  return(low_attendance)
+# Function to identify students with attendance below a certain threshold
+identify_low_attendance <- function(data, threshold = 75) {
+  low_attendance_students <- data[data$Attendance < threshold, ]
+  return(low_attendance_students)
 }
 
-# Function to generate a performance report
-generate_report <- function() {
-  avg_scores <- calculate_average_scores()
-  low_attendance <- identify_low_attendance(70)
-  report <- merge(avg_scores, low_attendance, by = "Name", all = TRUE)
-  report$Attendance[is.na(report$Attendance)] <- 100
-  cat("Performance Report:\n")
-  print(report)
+# Function to generate a report with student names, average scores, and attendance status
+generate_report <- function(data, attendance_threshold = 75) {
+  data <- calculate_average_scores(data)
+  low_attendance <- identify_low_attendance(data, attendance_threshold)
+  data$Attendance_Status <- ifelse(data$Attendance < attendance_threshold, "Low", "Satisfactory")
+  return(data)
 }
 
 # Main program
-while (TRUE) {
-  cat("\n1. Add Student\n2. Generate Report\n3. Exit\n")
-  choice <- as.integer(readline("Enter your choice: "))
-  if (choice == 1) {name <- readline("Enter student name: ")
-  math_score <- as.numeric(readline("Enter math score: "))
-  science_score <- as.numeric(readline("Enter science score: "))
-  history_score <- as.numeric(readline("Enter history score: "))
-  attendance <- as.numeric(readline("Enter attendance percentage: "))
-  add_student(name, math_score, science_score, history_score, attendance)
-  } else if (choice == 2) {
-    generate_report()
-  } else if (choice == 3) {
-    cat("Exiting the program. Goodbye!\n")
-    break
-  } else {
-    cat("Invalid choice. Please try again.\n")
-  }
-}
+students <- calculate_average_scores(students)
+low_attendance_students <- identify_low_attendance(students, 75)
+report <- generate_report(students, 75)
+
+# Print results
+print("Student Data with Average Scores:")
+print(students)
+
+print("Students with Low Attendance:")
+print(low_attendance_students)
+
+print("Generated Report:")
+print(report)
