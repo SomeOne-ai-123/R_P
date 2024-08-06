@@ -3,7 +3,7 @@ library(dplyr)
 library(ggplot2)
 
 # Task 1: Load the Dataset - USE YOUR DIRECTORY OF THE CSV FILE!
-purchase_data <- read_csv("/Users/narmdeshwarlal/Downloads/shopping_trends.csv")
+purchase_data <- read_csv("path.csv")
 
 # Load required libraries
 
@@ -47,7 +47,7 @@ ggplot(purchase_data, aes(x = PurchaseAmount)) +
   labs(title = "Distribution of Purchase Amounts", x = "Purchase Amount", y = "Frequency")
 
 # Save the visualizations as image files (USE YOUR OWN DIRECTORY TO SAVE PNG!)
-ggsave("/Users/narmdeshwarlal/Statistical-Programming-Laboratory-ADL47-AIL47/PBQ9\ Data\ Analysis/purchase_histogram.png", width = 8, height = 6)
+ggsave("path.png", width = 8, height = 6)
 
 # Task 6: Visualize Relationship (Scatter Plot)
 ggplot(purchase_data, aes(x = CustomerID, y = PurchaseAmount)) +
@@ -55,4 +55,4 @@ ggplot(purchase_data, aes(x = CustomerID, y = PurchaseAmount)) +
   labs(title = "Customer Purchase Amounts", x = "Customer ID", y = "Purchase Amount")
 
 # Save the visualizations as image files (USE YOUR OWN DIRECTORY TO SAVE PNG!)
-ggsave("/Users/narmdeshwarlal/Statistical-Programming-Laboratory-ADL47-AIL47/PBQ9\ Data\ Analysis/customer_purchase_scatter.png", width = 8, height = 6)
+ggsave("path.png", width = 8, height = 6)
